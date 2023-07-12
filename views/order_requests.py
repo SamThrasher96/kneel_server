@@ -15,3 +15,10 @@ ORDERS = [
 
 def get_all_orders():
     return ORDERS
+
+def get_single_order(id):
+    requested_orders = None
+    for order in ORDERS:
+        if order["id"] == id:
+            requested_orders = order
+    return requested_orders

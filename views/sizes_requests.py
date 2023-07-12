@@ -29,7 +29,7 @@ SIZES = [
 def get_all_sizes():
     return SIZES
 
-def get_single_sizes(id):
+def get_single_size(id):
     requested_size = None
     for size in SIZES:
         if size["id"] == id:
