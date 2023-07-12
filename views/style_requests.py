@@ -1,30 +1,20 @@
-METALS = [
-    {
+STYLES = [
+        {
         "id": 1,
-        "metal": "Sterling Silver",
-        "price": 12.42
+        "style": "Classic",
+        "price": 500
     },
     {
         "id": 2,
-        "metal": "14K Gold",
-        "price": 736.4
+        "style": "Modern",
+        "price": 710
     },
     {
         "id": 3,
-        "metal": "24K Gold",
-        "price": 1258.9
-    },
-    {
-        "id": 4,
-        "metal": "Platinum",
-        "price": 795.45
-    },
-    {
-        "id": 5,
-        "metal": "Palladium",
-        "price": 1241
+        "style": "Vintage",
+        "price": 965
     }
 ]
 
-def get_all_metals():
-    return METALS
+def get_all_styles():
+    return STYLES
