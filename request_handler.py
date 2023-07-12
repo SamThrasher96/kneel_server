@@ -1,27 +1,43 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes
+from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal
 
 
 class HandleRequests(BaseHTTPRequestHandler):
-    """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
-    """
+    def parse_url(self, path):
+        path_params = path.split("/")
+        resource = path_params[1]
+        id = None
+
+        try:
+            id = int(path_params[2])
+        except IndexError:
+            pass # No route parameter exists: /metals
+        except ValueError:
+            pass # Request had trailing slash: /metals/
+
+        return (resource, id)
+
 
     def do_GET(self):
         """Handles GET requests to the server """
         self._set_headers(200)
         response = {}  # Default response
+        (resource, id) = self.parse_url(self.path)
 
-        if self.path == "/metals":
-            response = get_all_metals()
+        if resource == "metals":
+            if id is not None:
+                response = get_single_metal(id) 
+            else:
+                response = get_all_metals()
 
-        elif self.path == "/orders":
+        elif resource == "orders":
             response = get_all_orders()
 
-        elif self.path == "/sizes":
+        elif resource == "sizes":
             response = get_all_sizes()
 
-        elif self.path == "/styles":
+        elif resource == "styles":
             response = get_all_styles()
 
         else:
