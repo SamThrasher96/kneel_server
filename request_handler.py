@@ -1,7 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style
-
+from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style, get_single_sizes
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -31,21 +30,20 @@ class HandleRequests(BaseHTTPRequestHandler):
             else:
                 response = get_all_metals()
 
-        elif resource == "orders":
+        if resource == "orders":
             response = get_all_orders()
 
-        elif resource == "sizes":
-            response = get_all_sizes()
+        if resource == "sizes":
+            if id is not None:
+                response = get_single_sizes(id)
+            else:
+                response = get_all_sizes()
 
         if resource == "styles":
             if id is not None:
                 response = get_single_style(id) 
-            
             else:
                 response = get_all_styles()
-
-        else:
-            response = []
 
         self.wfile.write(json.dumps(response).encode())
 
