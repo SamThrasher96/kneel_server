@@ -10,9 +10,19 @@ class HandleRequests(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handles GET requests to the server """
         self._set_headers(200)
+        response = {}  # Default response
 
         if self.path == "/metals":
             response = get_all_metals()
+
+        elif self.path == "/orders":
+            response = get_all_orders()
+
+        elif self.path == "/sizes":
+            response = get_all_sizes()
+
+        elif self.path == "/styles":
+            response = get_all_styles()
 
         else:
             response = []
