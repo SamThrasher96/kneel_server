@@ -29,3 +29,13 @@ def create_order(order):
     order["id"] = new_id
     ORDERS.append(order)
     return order
+
+def delete_order(id):
+    order_index = -1
+
+    for index, order in enumerate(ORDERS):
+        if order["id"] == id:
+            order_index = index
+
+    if order_index >= 0:
+        ORDERS.pop(order_index)
