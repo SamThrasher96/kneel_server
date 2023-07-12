@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal
+from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -37,8 +37,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == "sizes":
             response = get_all_sizes()
 
-        elif resource == "styles":
-            response = get_all_styles()
+        if resource == "styles":
+            if id is not None:
+                response = get_single_style(id) 
+            
+            else:
+                response = get_all_styles()
 
         else:
             response = []

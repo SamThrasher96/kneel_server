@@ -18,3 +18,10 @@ STYLES = [
 
 def get_all_styles():
     return STYLES
+
+def get_single_style(id):
+    requested_style = None
+    for style in STYLES:
+        if style["id"] == id:
+            requested_style = style
+    return requested_style
