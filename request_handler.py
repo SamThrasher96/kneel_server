@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style, get_single_size, get_single_order
+from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style, get_single_size, get_single_order, create_order
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -57,6 +57,15 @@ class HandleRequests(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
         response = { "payload" : post_body }
+        post_body = json.loads(post_body)
+        (resource, id) = self.parse_url(self.path)
+
+        new_order = None
+
+        if resource == "orders":
+            new_order = create_order(post_body)
+            response = new_order
+
         self.wfile.write(json.dumps(response).encode())
 
     def do_PUT(self):

@@ -22,3 +22,10 @@ def get_single_order(id):
         if order["id"] == id:
             requested_orders = order
     return requested_orders
+
+def create_order(order):
+    max_id = ORDERS[-1]["id"]
+    new_id = max_id + 1
+    order["id"] = new_id
+    ORDERS.append(order)
+    return order
