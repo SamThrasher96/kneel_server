@@ -39,3 +39,9 @@ def delete_order(id):
 
     if order_index >= 0:
         ORDERS.pop(order_index)
+
+def update_order(id, new_order):
+    for index, order in enumerate(ORDERS):
+        if order["id"] == id:
+            ORDERS[index] = new_order
+            break
