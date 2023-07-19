@@ -1,5 +1,5 @@
 SIZES = [
-        {
+    {
         "id": 1,
         "carets": 0.5,
         "price": 405
