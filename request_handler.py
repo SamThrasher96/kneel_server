@@ -1,6 +1,6 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style, get_single_size, get_single_order, create_order, delete_order, update_order
+from views import get_all_styles, get_all_metals, get_all_orders, get_all_sizes, get_single_metal, get_single_style, get_single_size, get_single_order, create_order, delete_order, update_metal
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -69,17 +69,26 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode())
 
     def do_PUT(self):
-        self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
-        post_body = json.loads(self.rfile.read(content_len))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
-
-        if resource == "orders":
-            update_order(id, post_body)
         
-        self.wfile.write("".encode())
+        success = False
+
+        if resource == "metals":
+            success = update_metal(id, post_body)
+            
+        if success:
+            self._set_headers(204)
+            response = ""
+        else:
+            self._set_headers(404)
+            response = "Error: Metal not in inventory or failed to update"
+        
+        self.wfile.write(response.encode())
 
     def _set_headers(self, status):
         """Sets the status code, Content-Type and Access-Control-Allow-Origin
