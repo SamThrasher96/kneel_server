@@ -1,3 +1,7 @@
+import sqlite3
+import json
+from models import Order
+
 ORDERS = [
     {
         "metalId": 1,
@@ -14,7 +18,27 @@ ORDERS = [
 ]
 
 def get_all_orders():
-    return ORDERS
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        SELECT
+            o.id,
+            o.metal_id,
+            o.size_id,
+            o.style_id
+        FROM "orders" o
+        """)
+        
+        orders = []
+        
+        dataset = db_cursor.fetchall()
+        
+        for row in dataset:
+            order = Order(row['id'], row['metal_id'], row['size_id'], row['style_id'])
+            orders.append(order.__dict__)
+    return orders
 
 def get_single_order(id):
     requested_orders = None
