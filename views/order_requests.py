@@ -61,12 +61,20 @@ def get_single_order(id):
 
     return order.__dict__
 
-def create_order(order):
-    max_id = ORDERS[-1]["id"]
-    new_id = max_id + 1
-    order["id"] = new_id
-    ORDERS.append(order)
-    return order
+def create_order(new_order):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        INSERT INTO "orders"
+            ( metal_id, size_id, style_id)
+        VALUES
+            ( ?, ?, ? );
+        """, ( new_order['metal_id'], new_order['size_id'], new_order['style_id'], ))
+        
+        id = db_cursor.lastrowid
+        new_order['id'] = id
+    return new_order
+
 
 def delete_order(id):
     order_index = -1
