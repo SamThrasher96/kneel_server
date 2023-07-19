@@ -41,11 +41,25 @@ def get_all_orders():
     return orders
 
 def get_single_order(id):
-    requested_orders = None
-    for order in ORDERS:
-        if order["id"] == id:
-            requested_orders = order
-    return requested_orders
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        SELECT
+            o.id,
+            o.metal_id,
+            o.size_id,
+            o.style_id
+        FROM "orders" o
+        WHERE o.id = ?
+        """, ( id, ))
+        
+        data = db_cursor.fetchone()
+        
+        order = Order(data['id'], data['metal_id'], data['size_id'], data['style_id'])
+
+    return order.__dict__
 
 def create_order(order):
     max_id = ORDERS[-1]["id"]
