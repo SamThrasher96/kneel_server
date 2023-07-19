@@ -48,3 +48,18 @@ INSERT INTO `Styles` VALUES (null, "Vintage", 965);
 
 INSERT INTO `Orders` VALUES (null, 4, 2, 1);
 INSERT INTO `Orders` VALUES (null, 5, 3, 2);
+
+SELECT
+    o.size_id,
+    o.style_id,
+    o.metal_id,
+    m.metal,
+    m.price,
+    s.style,
+    s.price,
+    a.carets,
+    a.price
+FROM `Orders` o
+JOIN Metals m ON m.id = o.metal_id
+JOIN Styles s ON s.id = o.style_id
+JOIN Sizes a ON a.id = o.size_id

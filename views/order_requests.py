@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Order
+from models import Order, Metal, Size, Style
 
 ORDERS = [
     {
@@ -25,10 +25,22 @@ def get_all_orders():
         db_cursor.execute("""
         SELECT
             o.id,
-            o.metal_id,
             o.size_id,
-            o.style_id
-        FROM "orders" o
+            o.style_id,
+            o.metal_id,
+            m.metal metal_metal,
+            m.price metal_price,
+            s.style style_style,
+            s.price style_price,
+            a.carets size_carets,
+            a.price size_price
+        FROM `Orders` o
+        JOIN Metals m 
+            ON m.id = o.metal_id
+        JOIN Styles s 
+            ON s.id = o.style_id
+        JOIN Sizes a 
+        ON a.id = o.size_id
         """)
         
         orders = []
@@ -37,6 +49,13 @@ def get_all_orders():
         
         for row in dataset:
             order = Order(row['id'], row['metal_id'], row['size_id'], row['style_id'])
+            metal = Metal(row['id'], row['metal_metal'], row['metal_price'])
+            style = Style(row['id'], row['style_style'], row['style_price'])
+            size = Size(row['id'], row['size_carets'], row['size_price'])
+            order.metal = metal.__dict__
+            order.style = style.__dict__
+            order.size = size.__dict__
+            
             orders.append(order.__dict__)
     return orders
 
